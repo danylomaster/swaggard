@@ -1,4 +1,4 @@
-window.log = function(){
+window.log = function () {
   if ('console' in window) {
     console.log.apply(console, arguments);
   }
@@ -16,16 +16,17 @@ $(function () {
     highlightSizeThreshold: 5000
   });
 
-  if(window.SwaggerTranslator) {
+  if (window.SwaggerTranslator) {
     window.SwaggerTranslator.translate();
   }
 
   window.swaggerUi = new SwaggerUi({
     url: url,
+    validatorUrl: null,
     dom_id: "swagger-ui-container",
     supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
-    onComplete: function(swaggerApi, swaggerUi){
-      if(window.SwaggerTranslator) {
+    onComplete: function (swaggerApi, swaggerUi) {
+      if (window.SwaggerTranslator) {
         window.SwaggerTranslator.translate();
       }
 
@@ -33,28 +34,28 @@ $(function () {
       $('select[name="responseContentType"]').val(window.default_content_type);
       $('select[name="parameterContentType"]').val(window.default_content_type);
 
-      $('.additional_parameter').each(function() {
+      $('.additional_parameter').each(function () {
         updateParameter(this);
       });
     },
-    onFailure: function(data) {
+    onFailure: function (data) {
       log("Unable to Load SwaggerUI");
     },
     docExpansion: 'none',
     jsonEditor: true,
     defaultModelRendering: 'schema',
     showRequestHeaders: true,
-    apisSorter : 'alpha'
+    apisSorter: 'alpha'
   });
 
-  function updateParameter(input) {
+  function updateParameter (input) {
     var $input = $(input);
 
     var parameterKey = $input.data('parameterKey');
     var parameterType = $input.data('parameterType');
     var value = $input.val();
 
-    if(value && value.trim() != '') {
+    if (value && value.trim() != '') {
       swaggerUi.api.clientAuthorizations.add(
         parameterKey,
         new SwaggerClient.ApiKeyAuthorization(parameterKey, value, parameterType)
@@ -64,7 +65,7 @@ $(function () {
     }
   }
 
-  $('.additional_parameter').change(function() {
+  $('.additional_parameter').change(function () {
     updateParameter(this);
   });
 
